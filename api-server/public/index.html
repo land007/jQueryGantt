@@ -278,7 +278,7 @@ function loadFromLocalStorage() {
   } else {
     $("#taZone").show();
   }
-  alert(JSON.stringify(ret));
+//   alert(JSON.stringify(ret));
   if (!ret || !ret.tasks || ret.tasks.length == 0){
     ret = JSON.parse($("#ta").val());
 
@@ -290,7 +290,7 @@ function loadFromLocalStorage() {
 
 
   }
-  alert(JSON.stringify(ret));
+//   alert(JSON.stringify(ret));
   fetch('/users')
   .then(
     function(response) {
@@ -302,13 +302,12 @@ function loadFromLocalStorage() {
 
       // Examine the text in the response
       response.json().then(function(data) {
-        console.log(data);
-        
+        console.log(data[0]);
         //------------------------
-        ge.loadProject(ret);
+//         ge.loadProject(ret);
+        ge.loadProject(data[0]);
         ge.checkpoint(); //empty the undo stack
         //------------------------
-        
       });
     }
   )
@@ -321,7 +320,7 @@ function loadFromLocalStorage() {
 function saveInLocalStorage() {
   var prj = ge.saveProject();
   if (localStorage) {
-	alert(JSON.stringify(prj));
+// 	alert(JSON.stringify(prj));
 	(async () => {
 	  const rawResponse = await fetch('/users', {
 	    method: 'POST',
@@ -332,6 +331,7 @@ function saveInLocalStorage() {
 	    body: JSON.stringify(prj)
 	  });
 	  const content = await rawResponse.json();
+	  alert('保存成功！');
 	  console.log(content);
 	})();
     localStorage.setObject("teamworkGantDemo", prj);
@@ -478,9 +478,9 @@ function editResources(){
     <td class="gdfCell"><input type="text" name="end" value="" class="date"></td>
     <td class="gdfCell"><input type="text" name="duration" value="(#=obj.duration#)"></td>
     <td class="gdfCell"><input type="text" name="depends" value="(#=obj.depends#)" (#=obj.hasExternalDep?"readonly":""#)></td>
-    <td class="gdfCell"><input type="text" name="bei"></td>
-<td class="gdfCell"><input type="text" name="model"></td>
-<td class="gdfCell"><input type="text" name="inPeople"></td>
+    <td class="gdfCell"><input type="text" name="bei" value="(#=obj.bei#)"></td>
+	<td class="gdfCell"><input type="text" name="model" value="(#=obj.model#)"></td>
+	<td class="gdfCell"><input type="text" name="inPeople" value="(#=obj.inPeople#)"></td>
   </tr>
   --></div>
 
