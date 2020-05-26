@@ -1,0 +1,244 @@
+{
+  "1": {
+    "name": "king arthur",
+    "password": "password1",
+    "profession": "king",
+    "id": 1
+  },
+  "2": {
+    "name": "rob kendal",
+    "password": "password3",
+    "profession": "code fiddler",
+    "id": 2
+  },
+  "3": {
+    "name": "teresa may",
+    "password": "password2",
+    "profession": "brexit destroyer",
+    "id": 6
+  },
+  "4": {},
+  "5": {},
+  "6": {},
+  "7": {
+    "name": "teresa may1",
+    "password": "password21",
+    "profession": "brexit destroyer1"
+  },
+  "8": {
+    "tasks": [
+      {
+        "id": -1,
+        "name": "Gantt editor",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 0,
+        "status": "STATUS_ACTIVE",
+        "depends": "",
+        "canWrite": true,
+        "start": 1590508800000,
+        "duration": 22,
+        "end": 1592495999999,
+        "startIsMilestone": true,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": true
+      },
+      {
+        "id": -2,
+        "name": "coding",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 1,
+        "status": "STATUS_ACTIVE",
+        "depends": "",
+        "canWrite": true,
+        "start": 1590508800000,
+        "duration": 10,
+        "end": 1591459199999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": true
+      },
+      {
+        "id": -3,
+        "name": "gantt part",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 2,
+        "status": "STATUS_ACTIVE",
+        "depends": "",
+        "canWrite": true,
+        "start": 1590508800000,
+        "duration": 2,
+        "end": 1590681599999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": false
+      },
+      {
+        "id": -4,
+        "name": "editor part",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 2,
+        "status": "STATUS_SUSPENDED",
+        "depends": "3",
+        "canWrite": true,
+        "start": 1590681600000,
+        "duration": 4,
+        "end": 1591027199999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": false
+      },
+      {
+        "id": -5,
+        "name": "testing",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 1,
+        "status": "STATUS_SUSPENDED",
+        "depends": "2:5",
+        "canWrite": true,
+        "start": 1591891200000,
+        "duration": 7,
+        "end": 1592495999999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": true
+      },
+      {
+        "id": -6,
+        "name": "test on safari",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 2,
+        "status": "STATUS_SUSPENDED",
+        "depends": "",
+        "canWrite": true,
+        "start": 1591891200000,
+        "duration": 2,
+        "end": 1592063999999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": false
+      },
+      {
+        "id": -7,
+        "name": "test on ie",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 2,
+        "status": "STATUS_SUSPENDED",
+        "depends": "6",
+        "canWrite": true,
+        "start": 1592064000000,
+        "duration": 3,
+        "end": 1592323199999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": false
+      },
+      {
+        "id": -8,
+        "name": "sadasd",
+        "progress": 0,
+        "description": "",
+        "code": "",
+        "level": 2,
+        "status": "STATUS_SUSPENDED",
+        "depends": "6",
+        "canWrite": true,
+        "start": 1592064000000,
+        "duration": 2,
+        "end": 1592236799999,
+        "startIsMilestone": false,
+        "endIsMilestone": false,
+        "collapsed": false,
+        "assigs": [],
+        "hasChild": false
+      }
+    ],
+    "selectedRow": 7,
+    "deletedTaskIds": [],
+    "resources": [
+      {
+        "id": "tmp_1",
+        "name": "Resource 1"
+      },
+      {
+        "id": "tmp_2",
+        "name": "Resource 2"
+      },
+      {
+        "id": "tmp_3",
+        "name": "Resource 3"
+      },
+      {
+        "id": "tmp_4",
+        "name": "Resource 4"
+      },
+      {
+        "id": "tmp_5",
+        "name": "Resource 5"
+      },
+      {
+        "id": "tmp_6",
+        "name": "Resource 6"
+      },
+      {
+        "id": "tmp_7",
+        "name": "Resource 7"
+      },
+      {
+        "id": "tmp_8",
+        "name": "Resource 8"
+      },
+      {
+        "id": "tmp_9",
+        "name": "Resource 9"
+      },
+      {
+        "id": "tmp_10",
+        "name": "Resource 10"
+      }
+    ],
+    "roles": [
+      {
+        "id": "tmp_1",
+        "name": "Project Manager"
+      },
+      {
+        "id": "tmp_2",
+        "name": "Worker"
+      },
+      {
+        "id": "tmp_3",
+        "name": "Stakeholder/Customer"
+      }
+    ],
+    "canWrite": true,
+    "canWriteOnParent": true
+  }
+}
