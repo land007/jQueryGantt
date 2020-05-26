@@ -684,7 +684,7 @@ Ganttalendar.prototype.drawLink = function (from, to, type) {
         var p = svg.createPath();
 
         //add the arrow
-        svg.image(group, 0, 0, 5, 10, "../gantt/res/linkArrow.png");
+        svg.image(group, 0, 0, 5, 10, "../res/linkArrow.png");
         //create empty path
         svg.path(group, p, { class: "taskLinkPathSVG" });
 
