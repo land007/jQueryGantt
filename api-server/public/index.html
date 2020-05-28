@@ -11,8 +11,10 @@
   <link rel=stylesheet href="gantt.css" type="text/css">
   <link rel=stylesheet href="ganttPrint.css" type="text/css" media="print">
 
- <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<!--   <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script> -->
+  <script src="libs/jquery.min.js"></script>
+<!--   <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js"></script> -->
+  <script src="libs/jquery-ui.min.js "></script>
 
   <script src="libs/jquery.livequery.min.js"></script>
   <script src="libs/jquery.timers.js"></script>
@@ -109,7 +111,7 @@ $(function() {
   //inject some buttons (for this demo only)
   $(".ganttButtonBar div").append("<button onclick='clearGantt();' class='button'>清空</button>")
           .append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-          .append("<button onclick='getFile();' class='button'>出口</button>");
+          .append("<button onclick='getFile();' class='button'>导出</button>");
   
   $(".ganttButtonBar div").addClass('buttons');
   //overwrite with localized ones
@@ -213,11 +215,6 @@ function setResource() {
   ge.resources = res;
 }
 
-
-function editResources(){
-
-}
-
 function clearGantt() {
   ge.reset();
 }
@@ -252,9 +249,10 @@ function getFile() {
   $("#gimBaPrj").val(JSON.stringify(ge.saveProject()));
   $("#gimmeBack").submit();
   $("#gimBaPrj").val("");
-
-  /*  var uriContent = "data:text/html;charset=utf-8," + encodeURIComponent(JSON.stringify(prj));
-   neww=window.open(uriContent,"dl");*/
+  var prj = ge.saveProject();
+  var uriContent = "data:text/html;charset=utf-8," + encodeURIComponent(JSON.stringify(prj));
+//   console.log(uriContent);
+  neww=window.open(uriContent,"_blank");
 }
 
 
@@ -403,7 +401,7 @@ function editResources(){
   });
 
 
-  //var ndo = createBlackPage(400, 500).append(resourceEditor);
+  var ndo = createBlackPage(400, 500).append(resourceEditor);
 }
 
 
@@ -413,7 +411,6 @@ function editResources(){
 <div id="gantEditorTemplates" style="display:none;">
   <div class="__template__" type="GANTBUTTONS"><!--
   <div class="ganttButtonBar noprint">
-    
     <div class="buttons">
     <button onclick="$('#workSpace').trigger('undo.gantt');" class="button textual" title="撤销"><span class="teamworkIcon">&#39;</span></button>
     <button onclick="$('#workSpace').trigger('redo.gantt');" class="button textual" title="恢复"><span class="teamworkIcon">&middot;</span></button>
@@ -449,16 +446,14 @@ function editResources(){
       <th class="gdfColHeader" style="width:35px;"></th>
       <th class="gdfColHeader" style="width:25px;"></th>
       <th class="gdfColHeader gdfResizable" style="width:30px;">任务编码</th>
-
       <th class="gdfColHeader gdfResizable" style="width:200px;">任务名称</th>
       <th class="gdfColHeader gdfResizable" style="width:80px;">开始时间</th>
       <th class="gdfColHeader gdfResizable" style="width:80px;">完成时间</th>
       <th class="gdfColHeader gdfResizable" style="width:50px;">工期</th>
       <th class="gdfColHeader gdfResizable" style="width:50px;">前置任务</th>
-      
-    <th class="gdfColHeader gdfResizable" style="width:100px;">里程碑节点</th>
-<th class="gdfColHeader gdfResizable" style="width:100px;">关联模型</th>
-<th class="gdfColHeader gdfResizable" style="width:100px;">负责人</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">里程碑节点</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">关联模型</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">负责人</th>
     </tr>
     </thead>
   </table>
@@ -473,7 +468,6 @@ function editResources(){
       <div class="(#=obj.isParent()?'exp-controller expcoll exp':'exp-controller'#)" align="center"></div>
       <input type="text" name="name" value="(#=obj.name#)">
     </td>
-
     <td class="gdfCell"><input type="text" name="start"  value="" class="date"></td>
     <td class="gdfCell"><input type="text" name="end" value="" class="date"></td>
     <td class="gdfCell"><input type="text" name="duration" value="(#=obj.duration#)"></td>
@@ -495,8 +489,8 @@ function editResources(){
     <td class="gdfCell"></td>
     <td class="gdfCell"></td>
     <td class="gdfCell"></td>
-<td class="gdfCell"></td>
-<td class="gdfCell"></td>
+	<td class="gdfCell"></td>
+	<td class="gdfCell"></td>
   </tr>
   --></div>
 
@@ -506,7 +500,6 @@ function editResources(){
       <div class="taskStatus" status="(#=obj.status#)"></div>
       <div class="taskProgress" style="width:(#=obj.progress>100?100:obj.progress#)%; background-color:(#=obj.progress>100?'red':'rgb(153,255,51);'#);"></div>
       <div class="milestone (#=obj.startIsMilestone?'active':''#)" ></div>
-
       <div class="taskLabel"></div>
       <div class="milestone end (#=obj.endIsMilestone?'active':''#)" ></div>
     </div>
@@ -559,7 +552,6 @@ function editResources(){
       </td>
     </tr>
     </table>
-
   <h2>assignments</h2>
   <table  cellspacing="1" cellpadding="0" width="100%" id="assigsTable">
     <tr>
@@ -569,7 +561,6 @@ function editResources(){
       <th style="width:30px;" id="addAssig"><span class="teamworkIcon" style="cursor: pointer">+</span></th>
     </tr>
   </table>
-
   <div style="text-align: right; padding-top: 20px"><button id="saveButton" class="button big">save</button></div>
   </div>
   --></div>
@@ -587,7 +578,6 @@ function editResources(){
 
   <div class="__template__" type="RESOURCE_EDITOR"><!--
   <div class="resourceEditor" style="padding: 5px;">
-
     <h2>Project team</h2>
     <table  cellspacing="1" cellpadding="0" width="100%" id="resourcesTable">
       <tr>
@@ -595,7 +585,6 @@ function editResources(){
         <th style="width:30px;" id="addResource"><span class="teamworkIcon" style="cursor: pointer">+</span></th>
       </tr>
     </table>
-
     <div style="text-align: right; padding-top: 20px"><button id="resSaveButton" class="button big">save</button></div>
   </div>
   --></div>
