@@ -41,13 +41,16 @@ const userRoutes = (app, fs) => {
     	console.log(req.body);
 
         readFile(data => {
-            const newUserId = Object.keys(data).length + 1;
+//            const newUserId = Object.keys(data).length + 1;
 
             // add the new user
-            data[newUserId.toString()] = req.body;
-
+//            data[newUserId.toString()] = req.body;
+            data.unshift(req.body);
+            if(data.length > 20) {
+            	data.pop();
+            }
             writeFile(JSON.stringify(data, null, 2), () => {
-                res.status(200).send('new user added');
+                res.status(200).send(`{"msg": "new user added"}`);
             });
         },
             true);
@@ -60,11 +63,11 @@ const userRoutes = (app, fs) => {
         readFile(data => {
 
             // add the new user
-            const userId = req.params["id"];
+            const userId = parseInt(req.params["id"]);
             data[userId] = req.body;
 
             writeFile(JSON.stringify(data, null, 2), () => {
-                res.status(200).send(`users id:${userId} updated`);
+                res.status(200).send(`{"msg": "users id:${userId} updated"}`);
             });
         },
             true);
@@ -77,11 +80,11 @@ const userRoutes = (app, fs) => {
         readFile(data => {
 
             // add the new user
-            const userId = req.params["id"];
-            delete data[userId];
-
+            const userId = parseInt(req.params["id"]);
+//            delete data[userId];
+            data.splice(userId, 1);
             writeFile(JSON.stringify(data, null, 2), () => {
-                res.status(200).send(`users id:${userId} removed`);
+                res.status(200).send(`{"msg": "users id:${userId} removed"}`);
             });
         },
             true);
