@@ -22,6 +22,6 @@ RUN echo 'nohup node /node/proxy.js > /tmp/proxy.out 2>&1 &' >> /task.sh && \
 	echo 'node /node/src-gen/backend/main.js /home/project --hostname=0.0.0.0 --startup-timeout=-1 --inspect=0.0.0.0:9229' >> /start.sh
 
 #docker build -t "land007/gantt:latest" .
-#> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t land007/docker-compose --push .
+#> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t land007/gantt --push .
 #docker run -it --rm -p 80:80 --name gantt land007/gantt:latest
 
