@@ -12,8 +12,17 @@ const appRouter = (app, fs) => {
         res.send('welcome to the development api-server');
     });
     
-    app.get('/down', function(req, res){
-    	exec('node', ['/node/report/main.js', '/node/data/' + filename, '/node/data/users.json'], function(err, data) { 
+    app.get('/down', (req, res) => {
+    	let cmds = ['/node/report/main.js', '/node/data/' + filename, '/node/data/users.json'];
+    	var maxlevel = req.query.maxlevel;
+    	if(maxlevel) {
+    		cmds[cmds.length] = maxlevel;
+    	}
+    	var maxweek = req.query.maxweek;
+    	if(maxweek) {
+    		cmds[cmds.length] = maxweek;
+    	}
+    	exec('node', cmds, function(err, data) { 
 			console.log(err);
 			console.log(data.toString());
 			res.setHeader('Content-Type', 'application/octet-stream');
