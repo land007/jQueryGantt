@@ -22,7 +22,7 @@ const appRouter = (app, fs) => {
     	if(maxweek) {
     		cmds[cmds.length] = maxweek;
     	}
-    	exec('node', cmds, function(err, data) { 
+    	exec('node', cmds, {maxBuffer: 1024 * 50000}, function(err, data) { 
 			console.log(err);
 			console.log(data.toString());
 			res.setHeader('Content-Type', 'application/octet-stream');
