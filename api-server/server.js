@@ -11,6 +11,7 @@ const fs = require('fs');
 
 // configure our express instance with some body-parser settings 
 // including handling JSON data
+app.use(express.json({limit: '100mb'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
