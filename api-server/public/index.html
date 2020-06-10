@@ -110,8 +110,30 @@ $(function() {
 
   //inject some buttons (for this demo only)
   $(".ganttButtonBar div").append("<button onclick='clearGantt();' class='button'>清空</button>")
-          .append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-          .append("<button onclick='getFile();' class='button'>导出</button>");
+	  .append("&nbsp;&nbsp;")
+	  .append('级别')
+	  .append("&nbsp;")
+//	  .append('<button type="button" id="sub" class="sub">-</button>')
+	  .append('<input type="number" id="maxlevel" value="4" min="1" max="8" style="width:36px;"/>')
+//	  .append('<button type="button" id="add" class="add">+</button>')
+	  .append("&nbsp;")
+	  .append('周')
+	  .append("&nbsp;")
+//	  .append('<button type="button" id="sub" class="sub">-</button>')
+	  .append('<input type="number" id="maxweek" value="5" min="1" max="8" style="width:36px;"/>')
+//	  .append('<button type="button" id="add" class="add">+</button>')
+	  .append("&nbsp;")
+	  .append("<button onclick='getFile();' class='button'>导出</button>");
+  $('.add').click(function () {
+	  if ($(this).prev().val() < 3) {
+		  $(this).prev().val(+$(this).prev().val() + 1);
+		  }
+	  });
+  $('.sub').click(function () {
+	  if ($(this).next().val() > 1) {
+		  if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+		  }
+	  });
   
   $(".ganttButtonBar div").addClass('buttons');
   //overwrite with localized ones
@@ -246,13 +268,17 @@ function loadI18n() {
 
 //-------------------------------------------  Get project file as JSON (used for migrate project from gantt to Teamwork) ------------------------------------------------------
 function getFile() {
-  $("#gimBaPrj").val(JSON.stringify(ge.saveProject()));
-  $("#gimmeBack").submit();
-  $("#gimBaPrj").val("");
-  var prj = ge.saveProject();
-  var uriContent = "data:text/html;charset=utf-8," + encodeURIComponent(JSON.stringify(prj));
+//   $("#gimBaPrj").val(JSON.stringify(ge.saveProject()));
+//   $("#gimmeBack").submit();
+//   $("#gimBaPrj").val("");
+//   var prj = ge.saveProject();
+//   var uriContent = "data:text/html;charset=utf-8," + encodeURIComponent(JSON.stringify(prj));
 //   console.log(uriContent);
-  neww=window.open(uriContent,"_blank");
+	let maxlevel = $('#maxlevel').val();
+	let maxweek = $('#maxweek').val();
+// 	alert(maxlevel);
+	let uriContent = '/down?maxlevel=' + maxlevel + '&maxweek=' + maxweek;
+	window.open(uriContent, "_blank");
 }
 
 
@@ -452,8 +478,9 @@ function editResources(){
       <th class="gdfColHeader gdfResizable" style="width:50px;">工期</th>
       <th class="gdfColHeader gdfResizable" style="width:50px;">前置任务</th>
       <th class="gdfColHeader gdfResizable" style="width:100px;">里程碑节点</th>
-      <th class="gdfColHeader gdfResizable" style="width:100px;">关联模型</th>
-      <th class="gdfColHeader gdfResizable" style="width:100px;">负责人</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">完成百分比</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">工作组</th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">协作单位</th>
     </tr>
     </thead>
   </table>
@@ -473,6 +500,7 @@ function editResources(){
     <td class="gdfCell"><input type="text" name="duration" value="(#=obj.duration#)"></td>
     <td class="gdfCell"><input type="text" name="depends" value="(#=obj.depends#)" (#=obj.hasExternalDep?"readonly":""#)></td>
     <td class="gdfCell"><input type="text" name="bei" value="(#=obj.bei#)"></td>
+	<td class="gdfCell"><input type="text" name="progress" value="(#=obj.progress#)"></td>
 	<td class="gdfCell"><input type="text" name="model" value="(#=obj.model#)"></td>
 	<td class="gdfCell"><input type="text" name="inPeople" value="(#=obj.inPeople#)"></td>
   </tr>
@@ -489,6 +517,7 @@ function editResources(){
     <td class="gdfCell"></td>
     <td class="gdfCell"></td>
     <td class="gdfCell"></td>
+	<td class="gdfCell"></td>
 	<td class="gdfCell"></td>
 	<td class="gdfCell"></td>
   </tr>
