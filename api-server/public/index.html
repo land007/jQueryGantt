@@ -54,7 +54,8 @@
 			    			if(taskid == msg.taskid) {
 				    			let gdfTds = gdfTr.children;
 				    			let gdfTd = gdfTds[msg.ind];
-				    			let gdInp = gdfTd.children[0];
+// 				    			let gdInp = gdfTd.children[0];
+				    			let gdInp = $(gdfTd).children("input")[0];
 				    			gdInp.value = msg.value;
 				    			break;
 				    		}
@@ -64,7 +65,7 @@
 		        case 2://ge.addBelowCurrentTask();//TODO taskid
 		        	eval(msg.data);
 		           break;
-		        case 3:
+		        case 4:
 		        	var task = null;
 		        	for(let g in ge.tasks) {
 		        		if(ge.tasks[g].id == msg.taskid) {

@@ -80,24 +80,49 @@ GanttMaster.prototype.init = function (place) {
     }).bind("refreshTask.gantt", function (e, task) {
         self.drawTask(task);
     }).bind("deleteCurrentTask.gantt", function (e) {
+    	let taskid = ge.currentTask.id;
+    	let msg = {action: 2, data: "ge.deleteCurrentTask('" + taskid + "');"};
+    	socket.emit('chat message', msg);
         self.deleteCurrentTask();
     }).bind("addAboveCurrentTask.gantt", function () {
-        self.addAboveCurrentTask();
-    }).bind("addBelowCurrentTask.gantt", function () {
-    	let msg = {action: 2, data: "ge.addBelowCurrentTask();"};
+    	let taskid = ge.currentTask.id;
+    	let tasktime = new Date().getTime();
+    	let msg = {action: 2, data: "ge.addAboveCurrentTask('" + taskid + "', '" + tasktime + "');"};
     	socket.emit('chat message', msg);
-        self.addBelowCurrentTask();
+        self.addAboveCurrentTask(undefined, tasktime);
+    }).bind("addBelowCurrentTask.gantt", function () {
+    	let taskid = ge.currentTask.id;
+    	let tasktime = new Date().getTime();
+    	let msg = {action: 2, data: "ge.addBelowCurrentTask('" + taskid + "', '" + tasktime + "');"};
+    	socket.emit('chat message', msg);
+        self.addBelowCurrentTask(undefined, tasktime);
     }).bind("indentCurrentTask.gantt", function () {
-        self.indentCurrentTask();
+    	let taskid = ge.currentTask.id;
+    	let msg = {action: 2, data: "ge.indentCurrentTask('" + taskid + "');"};
+    	socket.emit('chat message', msg);
+        self.indentCurrentTask(taskid);
     }).bind("outdentCurrentTask.gantt", function () {
-        self.outdentCurrentTask();
+    	let taskid = ge.currentTask.id;
+    	let msg = {action: 2, data: "ge.outdentCurrentTask('" + taskid + "');"};
+    	socket.emit('chat message', msg);
+        self.outdentCurrentTask(taskid);
     }).bind("moveUpCurrentTask.gantt", function () {
-        self.moveUpCurrentTask();
+    	let taskid = ge.currentTask.id;
+    	let msg = {action: 2, data: "ge.moveUpCurrentTask('" + taskid + "');"};
+    	socket.emit('chat message', msg);
+        self.moveUpCurrentTask(taskid);
     }).bind("moveDownCurrentTask.gantt", function () {
-        self.moveDownCurrentTask();
+    	let taskid = ge.currentTask.id;
+    	let msg = {action: 2, data: "ge.moveDownCurrentTask('" + taskid + "');"};
+    	socket.emit('chat message', msg);
+        self.moveDownCurrentTask(taskid);
     }).bind("zoomPlus.gantt", function () {
+    	let msg = {action: 2, data: "ge.gantt.zoomGantt(true);"};
+    	socket.emit('chat message', msg);
         self.gantt.zoomGantt(true);
     }).bind("zoomMinus.gantt", function () {
+    	let msg = {action: 2, data: "ge.gantt.zoomGantt(false);"};
+    	socket.emit('chat message', msg);
         self.gantt.zoomGantt(false);
     }).bind("undo.gantt", function () {
         if (!self.canWrite)
@@ -704,42 +729,75 @@ GanttMaster.prototype.updateLinks = function (task) {
     return todoOk;
 };
 
-GanttMaster.prototype.moveUpCurrentTask = function () {
+GanttMaster.prototype.moveUpCurrentTask = function (taskid) {
     var self = this;
-    //console.debug("moveUpCurrentTask",self.currentTask)
+	var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
+    //console.debug("moveUpCurrentTask",currentTask)
     if (!self.canWrite)
         return;
 
-    if (self.currentTask) {
+    if (currentTask) {
         self.beginTransaction();
-        self.currentTask.moveUp();
+        currentTask.moveUp();
         self.endTransaction();
     }
 };
 
-GanttMaster.prototype.moveDownCurrentTask = function () {
+GanttMaster.prototype.moveDownCurrentTask = function (taskid) {
     var self = this;
-    //console.debug("moveDownCurrentTask",self.currentTask)
+	var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
+    //console.debug("moveDownCurrentTask",currentTask)
     if (!self.canWrite)
         return;
 
-    if (self.currentTask) {
+    if (currentTask) {
         self.beginTransaction();
-        self.currentTask.moveDown();
+        currentTask.moveDown();
         self.endTransaction();
     }
 };
 
-GanttMaster.prototype.outdentCurrentTask = function () {
+GanttMaster.prototype.outdentCurrentTask = function (taskid) {
     var self = this;
-    if (!self.canWrite || !self.currentTask.canWrite)
+	var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
+    if (!self.canWrite || !currentTask.canWrite)
         return;
 
-    if (self.currentTask) {
-        var par = self.currentTask.getParent();
+    if (currentTask) {
+        var par = currentTask.getParent();
 
         self.beginTransaction();
-        self.currentTask.outdent();
+        currentTask.outdent();
         self.endTransaction();
 
         //[expand]
@@ -747,20 +805,42 @@ GanttMaster.prototype.outdentCurrentTask = function () {
     }
 };
 
-GanttMaster.prototype.indentCurrentTask = function () {
+GanttMaster.prototype.indentCurrentTask = function (taskid) {
     var self = this;
-    if (!self.canWrite || !self.currentTask.canWrite)
+	var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
+    if (!self.canWrite || !currentTask.canWrite)
         return;
 
-    if (self.currentTask) {
+    if (currentTask) {
         self.beginTransaction();
-        self.currentTask.indent();
+        currentTask.indent();
         self.endTransaction();
     }
 };
 
-GanttMaster.prototype.addBelowCurrentTask = function () {
+GanttMaster.prototype.addBelowCurrentTask = function (taskid, tasktime) {
     var self = this;
+	var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
     if (!self.canWrite)
         return;
 
@@ -768,14 +848,18 @@ GanttMaster.prototype.addBelowCurrentTask = function () {
     self.beginTransaction();
     var ch;
     var row = 0;
-    if (self.currentTask) {
-        ch = factory.build("tmp_" + new Date().getTime(), "", "", self.currentTask.level + 1, self.currentTask.start, 1);
-        row = self.currentTask.getRow() + 1;
+    if(tasktime === undefined) {
+    	tasktime = new Date().getTime();
+    }
+    if (currentTask) {
+//        ch = factory.build("tmp_" + tasktime, "", "", currentTask.level + 1, currentTask.start, 1);
+        ch = factory.build("tmp_" + tasktime, "", "", currentTask.level, currentTask.start, 1);
+        row = currentTask.getRow() + 1;
     } else {
-        ch = factory.build("tmp_" + new Date().getTime(), "", "", 0, new Date().getTime(), 1);
+        ch = factory.build("tmp_" + tasktime, "", "", 0, tasktime, 1);
     }
     var task = self.addTask(ch, row);
-    if (task) {
+    if (task && taskid === undefined) {
         task.rowElement.click();
         task.rowElement.find("[name=name]").focus();
     }
@@ -786,27 +870,41 @@ GanttMaster.prototype.addBelowCurrentTask = function () {
     self.endTransaction();
 };
 
-GanttMaster.prototype.addAboveCurrentTask = function () {
+GanttMaster.prototype.addAboveCurrentTask = function (taskid, tasktime) {
     var self = this;
+	var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
     if (!self.canWrite)
         return;
     var factory = new TaskFactory();
 
     var ch;
     var row = 0;
-    if (self.currentTask) {
+    if(tasktime === undefined) {
+    	tasktime = new Date().getTime();
+    }
+    if (currentTask) {
         //cannot add brothers to root
-        if (self.currentTask.level <= 0)
+        if (currentTask.level <= 0)
             return;
 
-        ch = factory.build("tmp_" + new Date().getTime(), "", "", self.currentTask.level, self.currentTask.start, 1);
-        row = self.currentTask.getRow();
+        ch = factory.build("tmp_" + tasktime, "", "", currentTask.level, currentTask.start, 1);
+        row = currentTask.getRow();
     } else {
-        ch = factory.build("tmp_" + new Date().getTime(), "", "", 0, new Date().getTime(), 1);
+        ch = factory.build("tmp_" + tasktime, "", "", 0, tasktime, 1);
     }
     self.beginTransaction();
     var task = self.addTask(ch, row);
-    if (task) {
+    if (task && taskid === undefined) {
         task.rowElement.click();
         task.rowElement.find("[name=name]").focus();
     }
@@ -817,16 +915,27 @@ GanttMaster.prototype.addAboveCurrentTask = function () {
     self.endTransaction();
 };
 
-GanttMaster.prototype.deleteCurrentTask = function () {
+GanttMaster.prototype.deleteCurrentTask = function (taskid) {
     var self = this;
-    if (!self.currentTask || !self.canWrite || !self.currentTask.canWrite)
+    var currentTask;
+    if(taskid) {
+    	for(let g in ge.tasks) {
+    		if(ge.tasks[g].id == taskid) {
+    			currentTask = ge.tasks[g]
+    			break;
+    		}
+    	}
+    } else {
+    	currentTask = self.currentTask;
+    }
+    if (!currentTask || !self.canWrite || !currentTask.canWrite)
         return;
-    var row = self.currentTask.getRow();
-    if (self.currentTask && (row > 0 || self.currentTask.isNew())) {
-        var par = self.currentTask.getParent();
+    var row = currentTask.getRow();
+    if (currentTask && (row > 0 || currentTask.isNew())) {
+        var par = currentTask.getParent();
         self.beginTransaction();
-        self.currentTask.deleteTask();
-        self.currentTask = undefined;
+        currentTask.deleteTask();
+        currentTask = undefined;
         //TODO:朱书彦 对code自动形成层级编码
         if (self.isLevelCode) {
             self.levelCode();
@@ -841,11 +950,13 @@ GanttMaster.prototype.deleteCurrentTask = function () {
         if (par) self.editor.refreshExpandStatus(par);
 
         //focus next row
-        row = row > self.tasks.length - 1 ? self.tasks.length - 1 : row;
-        if (row >= 0) {
-            self.currentTask = self.tasks[row];
-            self.currentTask.rowElement.click();
-            self.currentTask.rowElement.find("[name=name]").focus();
+        if(!taskid) {
+        	row = row > self.tasks.length - 1 ? self.tasks.length - 1 : row;
+        	if (row >= 0) {
+        		currentTask = self.tasks[row];
+        		currentTask.rowElement.click();
+        		currentTask.rowElement.find("[name=name]").focus();
+        	}
         }
 
         self.endTransaction();
