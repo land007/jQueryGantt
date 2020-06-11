@@ -39,6 +39,7 @@ GridEditor.prototype.fillEmptyLines = function () {
         //click on empty row create a task and fill above
         var master = this.master;
         emptyRow.click(function (ev) {
+        	return;//TODO 123
             var emptyRow = $(this);
             //add on the first empty row only
             if (!master.canWrite || emptyRow.prevAll(".emptyRow").size() > 0)
