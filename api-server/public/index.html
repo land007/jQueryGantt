@@ -65,7 +65,7 @@
 		        case 2://ge.addBelowCurrentTask();//TODO taskid
 		        	eval(msg.data);
 		           break;
-		        case 4:
+		        case 3:
 		        	var task = null;
 		        	for(let g in ge.tasks) {
 		        		if(ge.tasks[g].id == msg.taskid) {
@@ -80,10 +80,11 @@
 		            //var isSel = row.hasClass("rowSelected");
 		            row.closest("table").find(".rowSelected").removeClass("rowSelected");
 		            row.addClass("rowSelected");
+		            ge.currentTask.rowElement.addClass("rowSelected");
 
 		            //set current task
 // 		            self.master.currentTask = self.master.getTask(row.attr("taskId"));
-		            task.master.currentTask = task;
+// 		            task.master.currentTask = task;
 
 // 		            //move highlighter
 // 		            self.master.gantt.synchHighlight();
