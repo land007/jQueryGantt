@@ -47,10 +47,10 @@ function GanttMaster() {
     this.__undoStack = [];
     this.__redoStack = [];
     this.__inUndoRedo = false; // a control flag to avoid Undo/Redo stacks reset when needed
-    //TODO:ÖìÊéÑå ÉèÖÃÊÇ·ñÏÔÊ¾¶ÔÓ¦µÄbar
-    this.isBrowserTaskBar = false; //Ñ¡ÔñTaskÏÔÊ¾¶ÔÓ¦µÄbar
-    //TODO:ÖìÊéÑå ÊÇ·ñ¶Ôcode½øĞĞ×Ô¶¯±àÂë
-    this.isLevelCode = false; //ÊÇ·ñ×Ô¶¯¶Ôcode½øĞĞ±àÂë
+    //TODO:æœ±ä¹¦å½¦ è®¾ç½®æ˜¯å¦æ˜¾ç¤ºå¯¹åº”çš„bar
+    this.isBrowserTaskBar = false; //é€‰æ‹©Taskæ˜¾ç¤ºå¯¹åº”çš„bar
+    //TODO:æœ±ä¹¦å½¦ æ˜¯å¦å¯¹codeè¿›è¡Œè‡ªåŠ¨ç¼–ç 
+    this.isLevelCode = false; //æ˜¯å¦è‡ªåŠ¨å¯¹codeè¿›è¡Œç¼–ç 
     var self = this;
 }
 
@@ -84,6 +84,8 @@ GanttMaster.prototype.init = function (place) {
     }).bind("addAboveCurrentTask.gantt", function () {
         self.addAboveCurrentTask();
     }).bind("addBelowCurrentTask.gantt", function () {
+    	let msg = {action: 2, data: "ge.addBelowCurrentTask();"};
+    	socket.emit('chat message', msg);
         self.addBelowCurrentTask();
     }).bind("indentCurrentTask.gantt", function () {
         self.indentCurrentTask();
@@ -309,7 +311,7 @@ GanttMaster.prototype.addTask = function (task, row) {
         this.editor.addTask(task, row);
         //append task to gantt
         this.gantt.addTask(task);
-        //TODO:ÖìÊéÑå ¶Ôcode×Ô¶¯ĞÎ³É²ã¼¶±àÂë
+        //TODO:æœ±ä¹¦å½¦ å¯¹codeè‡ªåŠ¨å½¢æˆå±‚çº§ç¼–ç 
         if (this.isLevelCode) {
             this.levelCode();
         }
@@ -411,7 +413,7 @@ GanttMaster.prototype.loadTasks = function (tasks, selectedRow) {
     }
 };
 
-//TODO:ÖìÊéÑå ×Ô¶¯±àÂëcode
+//TODO:æœ±ä¹¦å½¦ è‡ªåŠ¨ç¼–ç code
 GanttMaster.prototype.levelCode = function () {
     if (this.tasks && this.tasks.length > 0) {
         var curCodeExt = 1;
@@ -438,37 +440,37 @@ GanttMaster.prototype.levelCode = function () {
     }
 };
 
-//TODO:ÖìÊéÑå ÏÔÊ¾task¶ÔÓ¦Bar
+//TODO:æœ±ä¹¦å½¦ æ˜¾ç¤ºtaskå¯¹åº”Bar
 GanttMaster.prototype.browserTaskBar = function (tsk) {
     if (tsk && tsk instanceof Task) {
         var id = tsk.id;
-        //ÕÒµ½taskBar
+        //æ‰¾åˆ°taskBar
         var taskBar = $("svg[taskid=\"" + id + "\"]");
         //var taskBarX = $(taskBar)[0].getBoundingClientRect().left;
         var taskBarX = parseFloat($(taskBar)[0].getAttribute("x"));
         var taskBarWidth = parseFloat($(taskBar)[0].getBoundingClientRect().width);
-        //»ñÈ¡svg×îÍâ²ã»­²¼canvas
+        //è·å–svgæœ€å¤–å±‚ç”»å¸ƒcanvas
         var canvas = $(taskBar).parent().parent().parent();
         var canvasWidth = parseFloat($(canvas).width());
-        //»ñÈ¡¹ö¶¯ÇøÓò
+        //è·å–æ»šåŠ¨åŒºåŸŸ
         var scroll = $(taskBar).parent().parent().parent().parent();
         var scrollWidth = parseFloat($(scroll).width());
-        //»ñÈ¡Ë®Æ½¹ö¶¯ÌõÒªÒÆ¶¯µÄÎ»ÖÃ
+        //è·å–æ°´å¹³æ»šåŠ¨æ¡è¦ç§»åŠ¨çš„ä½ç½®
         var centerLeft = (taskBarX + taskBarWidth / 2.0);
         var scrollLeft = (centerLeft - scrollWidth / 2.0);
         var oldScrollLeft = $(scroll).scrollLeft();
         if (Math.abs(oldScrollLeft - scrollLeft) >= 1.0) {
-            $(scroll).scrollLeft(scrollLeft); //ÉèÖÃ»¬¿éÎ»ÖÃ
+            $(scroll).scrollLeft(scrollLeft); //è®¾ç½®æ»‘å—ä½ç½®
         } else {
             return;
         }
         console.log("-------------------------------------------------------");
         console.log("task left:" + taskBarX);
         console.log("task width:" + taskBarWidth);
-        console.log("canvas width:" + canvasWidth); //»­²¼ÇøÓò´óĞ¡
-        console.log("scroll width:" + scrollWidth); //¹ö¶¯ÇøÓò´óĞ¡
-        console.log("scroll left position(old):" + oldScrollLeft); //¹ö¶¯ÇøÓò»¬¿éÎ»ÖÃ(¾É)
-        console.log("scroll left position(new):" + scrollLeft); //¹ö¶¯ÇøÓò»¬¿éÎ»ÖÃ(ĞÂ)
+        console.log("canvas width:" + canvasWidth); //ç”»å¸ƒåŒºåŸŸå¤§å°
+        console.log("scroll width:" + scrollWidth); //æ»šåŠ¨åŒºåŸŸå¤§å°
+        console.log("scroll left position(old):" + oldScrollLeft); //æ»šåŠ¨åŒºåŸŸæ»‘å—ä½ç½®(æ—§)
+        console.log("scroll left position(new):" + scrollLeft); //æ»šåŠ¨åŒºåŸŸæ»‘å—ä½ç½®(æ–°)
         console.log("-------------------------------------------------------");
     }
 };
@@ -517,7 +519,7 @@ GanttMaster.prototype.taskIsChanged = function () {
         //var profiler = new Profiler("gm_taskIsChangedReal");
         master.editor.redraw();
         master.gantt.refreshGantt();
-        //TODO:ÖìÊéÑå ¶Ôcode×Ô¶¯ĞÎ³É²ã¼¶±àÂë
+        //TODO:æœ±ä¹¦å½¦ å¯¹codeè‡ªåŠ¨å½¢æˆå±‚çº§ç¼–ç 
         if (self.isLevelCode) {
             self.LevelCode();
         }
@@ -777,7 +779,7 @@ GanttMaster.prototype.addBelowCurrentTask = function () {
         task.rowElement.click();
         task.rowElement.find("[name=name]").focus();
     }
-    //TODO:ÖìÊéÑå ¶Ôcode×Ô¶¯ĞÎ³É²ã¼¶±àÂë
+    //TODO:æœ±ä¹¦å½¦ å¯¹codeè‡ªåŠ¨å½¢æˆå±‚çº§ç¼–ç 
     if (self.isLevelCode) {
         self.levelCode();
     }
@@ -808,7 +810,7 @@ GanttMaster.prototype.addAboveCurrentTask = function () {
         task.rowElement.click();
         task.rowElement.find("[name=name]").focus();
     }
-    //TODO:ÖìÊéÑå ¶Ôcode×Ô¶¯ĞÎ³É²ã¼¶±àÂë
+    //TODO:æœ±ä¹¦å½¦ å¯¹codeè‡ªåŠ¨å½¢æˆå±‚çº§ç¼–ç 
     if (self.isLevelCode) {
         self.levelCode();
     }
@@ -825,7 +827,7 @@ GanttMaster.prototype.deleteCurrentTask = function () {
         self.beginTransaction();
         self.currentTask.deleteTask();
         self.currentTask = undefined;
-        //TODO:ÖìÊéÑå ¶Ôcode×Ô¶¯ĞÎ³É²ã¼¶±àÂë
+        //TODO:æœ±ä¹¦å½¦ å¯¹codeè‡ªåŠ¨å½¢æˆå±‚çº§ç¼–ç 
         if (self.isLevelCode) {
             self.levelCode();
         }

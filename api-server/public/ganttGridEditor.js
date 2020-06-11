@@ -325,6 +325,19 @@ GridEditor.prototype.bindRowInputEvents = function (task, taskRow) {
     //cursor key movement
     taskRow.find("input").keydown(function (event) {
         var theCell = $(this);
+        setTimeout(function() {
+        	let msg = {action: 1};
+        	msg.taskid =  theCell[0].parentNode.parentNode.getAttribute('taskid');
+            for(let c = 0; c < theCell[0].parentNode.parentNode.children.length; c++) {
+	          	if(theCell[0].parentNode.parentNode.children[c] == theCell[0].parentNode) {
+	          		msg.ind = c;
+	          		break;
+	          	}
+            }
+        	msg.value = theCell[0].value;
+            socket.emit('chat message', msg);
+        }, 100);
+        
         var theTd = theCell.parent();
         var theRow = theTd.parent();
         var col = theTd.prevAll("td").size();
@@ -397,7 +410,10 @@ GridEditor.prototype.bindRowInputEvents = function (task, taskRow) {
 
     //bind row selection
     taskRow.click(function () {
-        var row = $(this);
+    	var row = $(this);
+    	let msg = {action: 3};
+    	msg.taskid = row[0].getAttribute('taskid');;
+        socket.emit('chat message', msg);
         //var isSel = row.hasClass("rowSelected");
         row.closest("table").find(".rowSelected").removeClass("rowSelected");
         row.addClass("rowSelected");
