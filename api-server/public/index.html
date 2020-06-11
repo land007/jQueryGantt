@@ -55,8 +55,58 @@
 				    			let gdfTds = gdfTr.children;
 				    			let gdfTd = gdfTds[msg.ind];
 // 				    			let gdInp = gdfTd.children[0];
-				    			let gdInp = $(gdfTd).children("input")[0];
-				    			gdInp.value = msg.value;
+				    			let el = $(gdfTd).children("input")[0];
+				    			el.value = msg.value;
+				    			//update task from editor
+				                var field = el.getAttribute("name");
+								var task;
+							    if(msg.taskid) {
+							    	for(let g in ge.tasks) {
+							    		if(ge.tasks[g].id == taskid) {
+							    			task = ge.tasks[g]
+							    			break;
+							    		}
+							    	}
+							    }
+								if(task === undefined) {
+									return;
+								}
+				                task.master.beginTransaction();
+				                if (field == "depends") {
+				                    var oldDeps = task.depends;
+				                    task.depends = el.value;
+
+				                    //start is readonly in case of deps
+				                    if (task.depends) {
+				                        row.find("[name=start]").attr("readonly", "true");
+				                    } else {
+				                        row.find("[name=start]").removeAttr("readonly");
+				                    }
+
+				                    // update links
+				                    var linkOK = self.master.updateLinks(task);
+				                    if (linkOK) {
+				                        //synchronize status from superiors states
+				                        var sups = task.getSuperiors();
+				                        for (var i = 0; i < sups.length; i++) {
+				                            if (!sups[i].from.synchronizeStatus())
+				                                break;
+				                        }
+				                        self.master.changeTaskDates(task, task.start, task.end); // fake change to force date recomputation from dependencies
+				                    }
+				                } else if (field == "duration") {
+				                    var dur = task.duration;
+				                    dur = parseInt(el.value) || 1;
+				                    el.val(dur);
+				                    var newEnd = computeEndByDuration(task.start, dur);
+				                    self.master.changeTaskDates(task, task.start, newEnd);
+				                } else if (field == "name" && el.value == "") { // remove unfilled task
+				                    task.deleteTask();
+				                } else {
+				                    task[field] = el.value;
+// 				                    task[field] = msg.value;
+				                }
+				                task.master.endTransaction();
 				    			break;
 				    		}
 			    		}
