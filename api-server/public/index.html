@@ -35,7 +35,6 @@
   <script type="text/javascript">
 	var room = 'global';//cached
     var socket = io();
-    socket.emit = function(a ,b){};
 	$(function() {
 	    $('form').submit(function() {
 	        socket.emit('chat message', $('#m').val());
@@ -154,6 +153,7 @@
 		socket.on('get room', function (data) {
 			console.log('get room：' + JSON.stringify(data));
 			socket.emit('subscribe', { room: room });
+		    socket.emit = function(a ,b){};
 		});
 	});
    </script>
