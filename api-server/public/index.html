@@ -33,7 +33,17 @@
   <script type="text/javascript" src="ganttMaster.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
-	var room = 'global';//cached
+	var getQueryVariable = function(variable) {
+	   var query = window.location.search.substring(1);
+	   var vars = query.split("&");
+	   for (var i=0;i<vars.length;i++) {
+		   var pair = vars[i].split("=");
+		   if(pair[0] == variable){return pair[1];}
+	   }
+	   return(false);
+	};
+	var room = getQueryVariable('name')? getQueryVariable('name'): 'global';
+// 	var room = 'global';//cached
     var socket = io();
 	$(function() {
 	    $('form').submit(function() {
@@ -153,7 +163,9 @@
 		socket.on('get room', function (data) {
 			console.log('get room：' + JSON.stringify(data));
 			socket.emit('subscribe', { room: room });
-		    socket.emit = function(a ,b){};
+			setTimeout(function(){
+			    socket.emit = function(a, b){};
+			}, 100);
 		});
 	});
    </script>
@@ -387,7 +399,7 @@ function loadFromLocalStorage() {
       ret.tasks[i].start=ret.tasks[i].start+offset;
   }
 //   alert(JSON.stringify(ret));
-  fetch('/users')
+  fetch('/users/' + room)
   .then(
     function(response) {
       if (response.status !== 200) {

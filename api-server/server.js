@@ -39,6 +39,13 @@ io.on('connection', function(socket) {
 	  socket.on('subscribe', function(data) {
 		  console.log('subscribe ' + data.room);
 		  socket.join(data.room);
+		// update socket's rooms
+		  if (socket.user_rooms) {
+			  console.log('socket.user_rooms ' + JSON.stringify(socket.user_rooms));
+		      socket.user_rooms.push(data.room);
+		  } else {
+		      socket.user_rooms = [data.room];
+		  }
 	  });
 	  socket.on('unsubscribe', function(data) {
 	      console.log('unsubscribe ' + data.room);
@@ -63,11 +70,15 @@ io.on('connection', function(socket) {
 //		  //获取particular room中的客户端，返回所有在此房间的socket实例
 //		  io.sockets.clients('particular room')
 		  //给自己所在的rooms发消息
-		  for(var room in socket.rooms) {
-			  if(room != socket.id) {
+//		  console.log('msg ' + JSON.stringify(msg));
+//		  console.log('rooms1 ' + JSON.stringify(socket.user_rooms));
+		  for(var r in socket.user_rooms) {
+			  var room = socket.user_rooms[r];
+//			  if(room != socket.id) {
 //				  io.to(room).emit('chat message', msg);
+//				  console.log('room ' + room);
 				  socket.broadcast.to(room).emit('chat message', msg);
-			  }
+//			  }
 		  }
 //		  socket.join('cached');
 //		  console.log(JSON.stringify(socket.rooms));

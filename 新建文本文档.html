@@ -278,6 +278,7 @@ function loadFromLocalStorage() {
   } else {
     $("#taZone").show();
   }
+  alert(JSON.stringify(ret));
   if (!ret || !ret.tasks || ret.tasks.length == 0){
     ret = JSON.parse($("#ta").val());
 
@@ -289,6 +290,7 @@ function loadFromLocalStorage() {
 
 
   }
+  alert(JSON.stringify(ret));
   ge.loadProject(ret);
   ge.checkpoint(); //empty the undo stack
 }

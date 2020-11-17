@@ -26,7 +26,7 @@ const userRoutes = (app, fs) => {
     };
 
     // READ
-    app.get('/users', (req, res) => {
+    app.get('/users/:userId', (req, res) => {
         fs.readFile(dataPath, 'utf8', (err, data) => {
             if (err) {
                 throw err;
@@ -37,7 +37,7 @@ const userRoutes = (app, fs) => {
     });
 
     // CREATE
-    app.post('/users', (req, res) => {
+    app.post('/users/:userId', (req, res) => {
     	console.log(req.body);
 
         readFile(data => {
@@ -58,7 +58,7 @@ const userRoutes = (app, fs) => {
 
 
     // UPDATE
-    app.put('/users/:id', (req, res) => {
+    app.put('/users/:userId/:id', (req, res) => {
 
         readFile(data => {
 
@@ -75,7 +75,7 @@ const userRoutes = (app, fs) => {
 
 
     // DELETE
-    app.delete('/users/:id', (req, res) => {
+    app.delete('/users/:userId/:id', (req, res) => {
 
         readFile(data => {
 
